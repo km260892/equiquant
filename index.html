@@ -1270,7 +1270,7 @@
             const returns = trades.map(t => t.returnPct);
             const meanReturn = returns.reduce((sum, r) => sum + r, 0) / returns.length;
             const negReturns = returns.filter(r => r < 0);
-            const downVar = negReturns.length > 0 ? negReturns.reduce((sum, r) => sum + Math.pow(r, 2), 0) / negReturns.length : 0;
+            const downVar =  negReturns.length > 0 ? negReturns.reduce((sum, r) => sum + Math.pow(r - 0, 2), 0) / negReturns.length : 0;
             const downDev = Math.sqrt(downVar);
             const sortino = downDev > 0 ? meanReturn / downDev : 0;
             
