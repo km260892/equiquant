@@ -533,10 +533,8 @@ function computeMetrics() {
   const annualizedReturn=yearsActive>0?(Math.pow(1+totalReturnPct/100,1/yearsActive)-1)*100:totalReturnPct;
 
   // Sortino: annualized return / annualized downside deviation
-  const neg=returns.filter(r=>r<0),dsd=neg.length?Math.sqrt(neg.reduce((s,r)=>s+r*r,0)/neg.length):0;
-  const tradesPerYear=closed.length/Math.max(yearsActive,0.01);
-  const annualizedDsd=dsd*Math.sqrt(tradesPerYear);
-  const sortino=annualizedDsd>0?annualizedReturn/annualizedDsd:annualizedReturn>0?99:0;
+  cconst neg=returns.filter(r=>r<0),dsd=neg.length?Math.sqrt(neg.reduce((s,r)=>s+r*r,0)/neg.length):0;
+  const sortino=dsd>0?avgReturn/dsd:avgReturn>0?99:0;
 
   // Calmar: annualized return / max drawdown
   const calmar=maxDD>0?annualizedReturn/maxDD:annualizedReturn>0?99:0;
