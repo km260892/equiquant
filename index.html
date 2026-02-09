@@ -568,11 +568,7 @@ function updateRiskMetrics(m) {
   const sq=document.getElementById('sortinoQuality');
   if(m.sortino>=2){sq.textContent='EXCELLENT';sq.className='range-quality excellent'}else if(m.sortino>=1){sq.textContent='GOOD';sq.className='range-quality good'}else if(m.sortino>=.5){sq.textContent='FAIR';sq.className='range-quality fair'}else{sq.textContent='POOR';sq.className='range-quality poor'}
 
-  document.getElementById('metricCalmar').textContent=m.calmar>=99?'∞':m.calmar.toFixed(2);
-  document.getElementById('calmarMarker').style.left=Math.min((Math.min(m.calmar,10)/5)*100,100)+'%';
-  const cq=document.getElementById('calmarQuality');
-  if(m.calmar>=3){cq.textContent='EXCELLENT';cq.className='range-quality excellent'}else if(m.calmar>=1.5){cq.textContent='GOOD';cq.className='range-quality good'}else if(m.calmar>=.5){cq.textContent='FAIR';cq.className='range-quality fair'}else{cq.textContent='POOR';cq.className='range-quality poor'}
-
+  
   document.getElementById('metricProfitFactor').textContent=m.profitFactor>=99?'∞':m.profitFactor.toFixed(2);
   document.getElementById('pfMarker').style.left=Math.min((Math.min(m.profitFactor,10)/3)*100,100)+'%';
   const pq=document.getElementById('pfQuality');
