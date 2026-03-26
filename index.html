@@ -526,17 +526,9 @@ function computeMetrics() {
   });
 
   // Sortino
-   // Correct Sortino
- const target = 0;
- const downside = returns.map(r => Math.min(0, r - target));
- const downsideSquared = downside.map(d => d * d);
- const downsideDeviation = Math.sqrt(
-  downsideSquared.reduce((s, d) => s + d, 0) / returns.length
-);
-
-const sortino = downsideDeviation > 0
-  ? avgReturn / downsideDeviation
-  : avgReturn > 0 ? 99 : 0;
+  const neg=returns.filter(r=>r<0),dsd=neg.length?Math.sqrt(neg.reduce((s,r)=>s+r*r,0)/neg.length):0;
+  const sortino=dsd>0?avgReturn/dsd:avgReturn>0?99:0;
+  const calmar=maxDD>0?totalReturnPct/maxDD:totalReturnPct>0?99:0;
 
   // Monthly returns (capital-weighted)
   const mm={};sorted.forEach(t=>{const d=new Date(t.exitTime||t.entryTime),k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');if(!mm[k])mm[k]=0;mm[k]+=(t.pnl/(t.capitalAtEntry||cap))*100});
