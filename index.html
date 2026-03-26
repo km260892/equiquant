@@ -525,11 +525,30 @@ function computeMetrics() {
     return{date:t.exitTime||t.entryTime,value:runCap,pct:((runCap-cap)/cap)*100};
   });
 
-  // Sortino
-  const neg=returns.filter(r=>r<0),dsd=neg.length?Math.sqrt(neg.reduce((s,r)=>s+r*r,0)/neg.length):0;
-  const sortino=dsd>0?avgReturn/dsd:avgReturn>0?99:0;
-  const calmar=maxDD>0?totalReturnPct/maxDD:totalReturnPct>0?99:0;
+ // ===== FUND-STYLE SORTINO (TIME-BASED) =====
 
+// First build equity curve returns (time-based)
+const equityReturns = [];
+for (let i = 1; i < eq.length; i++) {
+  const r = (eq[i].value - eq[i-1].value) / eq[i-1].value;
+  equityReturns.push(r);
+}
+
+// Average return
+const avgReturnTime = equityReturns.length
+  ? equityReturns.reduce((s, r) => s + r, 0) / equityReturns.length
+  : 0;
+
+// Downside deviation
+const downside = equityReturns.map(r => Math.min(0, r));
+const downsideDeviation = Math.sqrt(
+  downside.reduce((s, d) => s + d*d, 0) / (equityReturns.length || 1)
+);
+
+// Final Sortino
+const sortino = downsideDeviation > 0
+  ? avgReturnTime / downsideDeviation
+  : avgReturnTime > 0 ? 99 : 0;
   // Monthly returns (capital-weighted)
   const mm={};sorted.forEach(t=>{const d=new Date(t.exitTime||t.entryTime),k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');if(!mm[k])mm[k]=0;mm[k]+=(t.pnl/(t.capitalAtEntry||cap))*100});
 
